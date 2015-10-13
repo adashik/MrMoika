@@ -25,7 +25,8 @@
         android:id="@+id/washRegButton"
         android:layout_alignTop="@+id/carRegButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp" />
+        android:layout_marginTop="75dp"
+        android:onClick="carwashRegistration"/>
 
     <ImageView
         android:layout_width="wrap_content"

@@ -2,4 +2,6 @@
     <string name="app_name">MrMoika</string>
     <string name="car_registration">Я автовладелец</string>
     <string name="wash">Я хозяин мойки</string>
+    <string name="title_activity_carwash_registration">CarwashRegistration</string>
+
 </resources>
