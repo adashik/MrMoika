@@ -12,8 +12,56 @@
         android:id="@+id/logo_main"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:contentDescription="logo"
         android:background="@drawable/logo_carwash" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/logo_main"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="60dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Номер телефона:"
+            android:id="@+id/textViewPhone"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#505050" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextPhone"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:inputType="phone"
+            android:paddingTop="20dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Название:"
+            android:id="@+id/textViewName"
+            android:layout_below="@+id/editTextPhone"
+            android:layout_alignParentStart="true"
+            android:textColor="#505050" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editTextName"
+            android:layout_below="@+id/editTextPhone"
+            android:layout_alignParentStart="true"
+            android:inputType="text"
+            android:paddingTop="20dp"
+            />
+    </RelativeLayout>
+
 
 </RelativeLayout>

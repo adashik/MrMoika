@@ -9,9 +9,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.lessugly.mrmoika.R;
 
@@ -41,6 +44,26 @@ public class CarwashRegistration extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Шаг 1. Введите свои данные");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentPage = mViewPager.getCurrentItem();
+                switch (currentPage){
+                    case 0:
+                        CarwashRegistration.this.finish();
+                        break;
+                    case 1:
+                        mViewPager.setCurrentItem(currentPage-1);
+                        break;
+                    case 2:
+                        mViewPager.setCurrentItem(currentPage-1);
+                        break;
+                }
+            }
+        });
+
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -75,7 +98,13 @@ public class CarwashRegistration extends AppCompatActivity {
             }
         });
 
-
+        Button buttonNext = (Button) findViewById(R.id.buttonNext);
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
+            }
+        });
 
 
 
@@ -212,6 +241,7 @@ public class CarwashRegistration extends AppCompatActivity {
             return rootView;
         }
     }
+
 
 
 }

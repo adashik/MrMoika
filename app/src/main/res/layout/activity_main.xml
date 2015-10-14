@@ -11,22 +11,24 @@
 
     <Button
         android:layout_width="@dimen/main_button_width"
-        android:layout_height="@dimen/main_button_height"
+        android:layout_height="wrap_content"
         android:text="@string/car_registration"
         android:id="@+id/carRegButton"
         android:layout_marginBottom="209dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_next"/>
 
     <Button
         android:layout_width="@dimen/main_button_width"
-        android:layout_height="@dimen/main_button_height"
+        android:layout_height="wrap_content"
         android:text="@string/wash"
         android:id="@+id/washRegButton"
         android:layout_alignTop="@+id/carRegButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp"
-        android:onClick="carwashRegistration"/>
+        android:onClick="carwashRegistration"
+        android:background="@drawable/button_next"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -34,7 +36,7 @@
         android:id="@+id/logo_main"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="215dp"
+        android:layout_marginTop="120dp"
         android:contentDescription="logo"
         android:background="@drawable/logo_main" />
 </RelativeLayout>
