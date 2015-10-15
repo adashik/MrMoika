@@ -5,6 +5,5 @@
     <string name="title_activity_carwash_registration">CarwashRegistration</string>
     <string name="reg_next">Далее</string>
     <string name="phone_hint">Номер телефона:</string>
-    <string name="title_activity_carwash_map">Map</string>
 
 </resources>

@@ -1,7 +1,7 @@
 package com.lessugly.mrmoika.registration;
 
 
-import android.support.v4.app.FragmentTransaction;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -15,35 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lessugly.mrmoika.R;
 
 public class CarwashRegistration extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
     private static Toolbar toolbar;
 
@@ -73,13 +55,7 @@ public class CarwashRegistration extends AppCompatActivity {
                 }
             }
         });
-
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -116,12 +92,7 @@ public class CarwashRegistration extends AppCompatActivity {
                 mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
             }
         });
-
-
-
     }
-
-
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -133,11 +104,11 @@ public class CarwashRegistration extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position){
                 case 0:
-                    return FirstStep.newInstance(position + 1);
+                    return FirstStep.newInstance();
                 case 1:
-                    return SecondStep.newInstance(position + 1);
+                    return SecondStep.newInstance();
                 case 2:
-                    return ThirdStep.newInstance(position + 1);
+                    return ThirdStep.newInstance();
             }
             return null;
         }
@@ -148,40 +119,15 @@ public class CarwashRegistration extends AppCompatActivity {
             return 3;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "STEP 1";
-                case 1:
-                    return "STEP 2";
-                case 2:
-                    return "STEP 3";
-            }
-            return null;
-        }
     }
 
     /**
      * Создаем вкладки
      */
     public static class FirstStep extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static FirstStep newInstance(int sectionNumber) {
-            FirstStep fragment = new FirstStep();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+        public static FirstStep newInstance() {
+            return new FirstStep();
         }
 
         public FirstStep() {
@@ -194,71 +140,43 @@ public class CarwashRegistration extends AppCompatActivity {
             return rootView;
         }
     }
-    public static class SecondStep extends Fragment {
+    public static class SecondStep extends Fragment implements OnMapReadyCallback {
 
-        private SupportMapFragment fragment;
+        private SupportMapFragment supportMapFragment;
         private GoogleMap map;
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static SecondStep newInstance(int sectionNumber) {
-            SecondStep fragment = new SecondStep();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+        public static SecondStep newInstance() {
+            return new SecondStep();
         }
 
         public SecondStep() {
         }
-        private SupportMapFragment mSupportMapFragment;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_carwash_registration_second, container, false);
+            if (Build.VERSION.SDK_INT < 21) {
+                supportMapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);
+            } else {
+                supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+            }
+            supportMapFragment.getMapAsync(this);
             return rootView;
         }
 
         @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-            FragmentManager fm = getChildFragmentManager();
-            fragment = (SupportMapFragment) fm.findFragmentById(R.id.mapwhere);
-            if (fragment == null) {
-                fragment = SupportMapFragment.newInstance();
-                fm.beginTransaction().replace(R.id.mapwhere, fragment).commit();
-            }
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-            if (map == null) {
-                map = fragment.getMap();
-                map.addMarker(new MarkerOptions().position(new LatLng(0, 0)));
-            }
+        public void onMapReady(GoogleMap googleMap) {
+            map = googleMap;
+            LatLng sydney = new LatLng(43.227714, 76.951365);
+            map.addMarker(new MarkerOptions().position(sydney).title("Marker in FCB"));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,15));
         }
     }
     public static class ThirdStep extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static ThirdStep newInstance(int sectionNumber) {
-            ThirdStep fragment = new ThirdStep();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+        public static ThirdStep newInstance() {
+            return new ThirdStep();
         }
 
         public ThirdStep() {
