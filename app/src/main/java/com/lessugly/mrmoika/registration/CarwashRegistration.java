@@ -1,19 +1,25 @@
 package com.lessugly.mrmoika.registration;
 
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,10 +28,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lessugly.mrmoika.R;
+import com.lessugly.mrmoika.util.PhoneFormatting;
 
 public class CarwashRegistration extends AppCompatActivity {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private static Toolbar toolbar;
 
@@ -33,29 +39,29 @@ public class CarwashRegistration extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carwash_registration);
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Шаг 1. Введите свои данные");
+        toolbar.setTitle(R.string.step_one);
+        final Button buttonNext = (Button) findViewById(R.id.buttonNext);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int currentPage = mViewPager.getCurrentItem();
-                switch (currentPage){
+                switch (currentPage) {
                     case 0:
-                        CarwashRegistration.this.finish();
+                        openQuitDialog();
                         break;
                     case 1:
-                        mViewPager.setCurrentItem(currentPage-1);
+                        mViewPager.setCurrentItem(currentPage - 1);
                         break;
                     case 2:
-                        mViewPager.setCurrentItem(currentPage-1);
+                        mViewPager.setCurrentItem(currentPage - 1);
                         break;
                 }
             }
         });
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -68,13 +74,16 @@ public class CarwashRegistration extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        toolbar.setTitle("Шаг 1. Введите свои данные");
+                        toolbar.setTitle(R.string.step_one);
+                        buttonNext.setText(R.string.registration_button_next);
                         break;
                     case 1:
-                        toolbar.setTitle("Шаг 2. Укажите местоположение");
+                        toolbar.setTitle(R.string.step_two);
+                        buttonNext.setText(R.string.registration_button_next);
                         break;
                     case 2:
-                        toolbar.setTitle("Шаг 3. Проверка введенных данных ");
+                        toolbar.setTitle(R.string.step_three);
+                        buttonNext.setText(R.string.registration_button_confirm);
                         break;
                 }
             }
@@ -85,14 +94,59 @@ public class CarwashRegistration extends AppCompatActivity {
             }
         });
 
-        Button buttonNext = (Button) findViewById(R.id.buttonNext);
+
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                View view = CarwashRegistration.this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
                 mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
             }
         });
+
+
+
     }
+    @Override
+    public void onBackPressed() {
+        int currentPage = mViewPager.getCurrentItem();
+        switch (currentPage) {
+            case 0:
+                openQuitDialog();
+                break;
+            case 1:
+                mViewPager.setCurrentItem(currentPage - 1);
+                break;
+            case 2:
+                mViewPager.setCurrentItem(currentPage - 1);
+                break;
+        }
+    }
+
+    private void openQuitDialog() {
+        AlertDialog.Builder quitDialog = new AlertDialog.Builder(
+                CarwashRegistration.this);
+        quitDialog.setTitle(R.string.registration_quit_dialog);
+
+        quitDialog.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                CarwashRegistration.this.finish();
+            }
+        });
+
+        quitDialog.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        quitDialog.show();
+    }
+
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -133,10 +187,38 @@ public class CarwashRegistration extends AppCompatActivity {
         public FirstStep() {
         }
 
+        TextWatcher textWatcher = null;
+        int mStart;
+        int mCount;
+        int mAfter;
+
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_carwash_registration_first, container, false);
+            final EditText phoneNumber = (EditText) rootView.findViewById(R.id.carwashPhone);
+            textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    mStart=start;
+                    mCount=count;
+                    mAfter=after;
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    phoneNumber.removeTextChangedListener(textWatcher);
+                    phoneNumber.setText((String) PhoneFormatting.formatPhone(s, mStart, mCount, mAfter).get("phone"));
+                    phoneNumber.setSelection((int) PhoneFormatting.formatPhone(s, mStart, mCount, mAfter).get("selection"));
+                    phoneNumber.addTextChangedListener(textWatcher);
+                }
+            };
+            phoneNumber.addTextChangedListener(textWatcher);
             return rootView;
         }
     }
@@ -170,7 +252,7 @@ public class CarwashRegistration extends AppCompatActivity {
             map = googleMap;
             LatLng sydney = new LatLng(43.227714, 76.951365);
             map.addMarker(new MarkerOptions().position(sydney).title("Marker in FCB"));
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,15));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
         }
     }
     public static class ThirdStep extends Fragment {

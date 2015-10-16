@@ -30,35 +30,55 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Номер телефона:"
-            android:id="@+id/textViewPhone"
+            android:text="@string/phone"
+            android:id="@+id/phoneHint"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:textColor="#505050" />
+            android:textColor="@color/text_secondary" />
+        <EditText
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/carwashPhoneCode"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textAlignment="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:text="7"
+            android:paddingTop="20dp"
+            />
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editTextPhone"
+            android:id="@+id/carwashPhone"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:inputType="phone"
+            android:inputType="number"
+            android:textColorHint="@color/text_hint"
+            android:maxLength="15"
+            android:hint="@string/phone_hint"
             android:paddingTop="20dp"
-            />
+            android:layout_marginLeft="48dp"
+            android:text=""
+            ><requestFocus/></EditText>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Название:"
-            android:id="@+id/textViewName"
-            android:layout_below="@+id/editTextPhone"
+            android:text="@string/carwash_name"
+            android:id="@+id/carwashNameHint"
+            android:layout_below="@+id/carwashPhone"
             android:layout_alignParentStart="true"
-            android:textColor="#505050" />
+            android:textColor="@color/text_secondary" />
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editTextName"
-            android:layout_below="@+id/editTextPhone"
+            android:id="@+id/carwashName"
+            android:layout_below="@+id/carwashPhone"
             android:layout_alignParentStart="true"
             android:inputType="text"
+            android:text=""
+            android:hint="@string/carwash_name_hint"
+            android:textColorHint="@color/text_hint"
             android:paddingTop="20dp"
             />
     </RelativeLayout>

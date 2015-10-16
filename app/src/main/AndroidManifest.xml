@@ -28,7 +28,8 @@
         <activity
             android:name=".registration.CarwashRegistration"
             android:label="@string/title_activity_carwash_registration"
-            android:theme="@style/AppTheme" >
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden">
         </activity>
 
 

@@ -27,7 +27,7 @@
         android:id="@+id/buttonNext"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/main_button_height"
-        android:text="@string/reg_next"
+        android:text="@string/registration_button_next"
         android:textAllCaps="true"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
