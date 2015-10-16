@@ -103,6 +103,11 @@ public class CarwashRegistration extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
+                if (mViewPager.getCurrentItem()==0 && FirstStep.getPhoneNumber().getText().length()!=15){
+                        FirstStep.getPhoneNumber().setError("Номер должен содержать 10 цифр");
+                        FirstStep.getPhoneNumber().requestFocus();
+                    }
+                else
                 mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
             }
         });
@@ -180,6 +185,8 @@ public class CarwashRegistration extends AppCompatActivity {
      */
     public static class FirstStep extends Fragment {
 
+        private static EditText phoneNumber;
+
         public static FirstStep newInstance() {
             return new FirstStep();
         }
@@ -192,11 +199,16 @@ public class CarwashRegistration extends AppCompatActivity {
         int mCount;
         int mAfter;
 
+
+        public static EditText getPhoneNumber() {
+            return phoneNumber;
+        }
+
         @Override
         public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_carwash_registration_first, container, false);
-            final EditText phoneNumber = (EditText) rootView.findViewById(R.id.carwashPhone);
+            phoneNumber = (EditText) rootView.findViewById(R.id.carwashPhone);
             textWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
