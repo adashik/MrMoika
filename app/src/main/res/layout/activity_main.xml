@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="@string/car_registration"
         android:id="@+id/carRegButton"
-        android:layout_marginBottom="209dp"
+        android:layout_marginBottom="120dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@drawable/button_next"/>
@@ -36,7 +36,7 @@
         android:id="@+id/logo_main"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="115dp"
         android:contentDescription="logo"
         android:background="@drawable/logo_main" />
 </RelativeLayout>

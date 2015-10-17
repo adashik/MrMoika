@@ -4,6 +4,7 @@ package com.lessugly.mrmoika.registration;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,13 +14,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,7 +38,7 @@ import com.lessugly.mrmoika.util.PhoneFormatting;
 
 public class CarwashRegistration extends AppCompatActivity {
 
-    private ViewPager mViewPager;
+    private ViewPager viewPager;
     private static Toolbar toolbar;
 
     @Override
@@ -47,24 +53,24 @@ public class CarwashRegistration extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentPage = mViewPager.getCurrentItem();
+                int currentPage = viewPager.getCurrentItem();
                 switch (currentPage) {
                     case 0:
                         openQuitDialog();
                         break;
                     case 1:
-                        mViewPager.setCurrentItem(currentPage - 1);
+                        viewPager.setCurrentItem(currentPage - 1);
                         break;
                     case 2:
-                        mViewPager.setCurrentItem(currentPage - 1);
+                        viewPager.setCurrentItem(currentPage - 1);
                         break;
                 }
             }
         });
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(mSectionsPagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -94,7 +100,6 @@ public class CarwashRegistration extends AppCompatActivity {
             }
         });
 
-
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,30 +108,75 @@ public class CarwashRegistration extends AppCompatActivity {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
-                if (mViewPager.getCurrentItem()==0 && FirstStep.getPhoneNumber().getText().length()!=15){
-                        FirstStep.getPhoneNumber().setError("Номер должен содержать 10 цифр");
-                        FirstStep.getPhoneNumber().requestFocus();
-                    }
+                if (viewPager.getCurrentItem()==0) attemptMoveToStepTwo();
                 else
-                mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1, true);
+                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
             }
         });
 
-
-
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_registration, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_registration) {
+            attemptMoveToStepTwo();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void attemptMoveToStepTwo() {
+        EditText carwashName = FirstStep.getCarwashName();
+        EditText carwashPhone = FirstStep.getCarwashPhone();
+        carwashName.setError(null);
+        carwashPhone.setError(null);
+        String name = carwashName.getText().toString();
+        String phone = carwashPhone.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (phone.length() != 15){
+            carwashPhone.setError(getString(R.string.error_wrong_phone_number));
+            focusView = carwashPhone;
+            cancel = true;
+        }
+        else
+        if (TextUtils.isEmpty(name)){
+            carwashName.setError(getString(R.string.error_empty_carwash_name));
+            focusView = carwashName;
+            cancel = true;
+        }
+
+        if (cancel) focusView.requestFocus();
+        else
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
+    }
+
     @Override
     public void onBackPressed() {
-        int currentPage = mViewPager.getCurrentItem();
+        int currentPage = viewPager.getCurrentItem();
         switch (currentPage) {
             case 0:
                 openQuitDialog();
                 break;
             case 1:
-                mViewPager.setCurrentItem(currentPage - 1);
+                viewPager.setCurrentItem(currentPage - 1);
                 break;
             case 2:
-                mViewPager.setCurrentItem(currentPage - 1);
+                viewPager.setCurrentItem(currentPage - 1);
                 break;
         }
     }
@@ -185,7 +235,8 @@ public class CarwashRegistration extends AppCompatActivity {
      */
     public static class FirstStep extends Fragment {
 
-        private static EditText phoneNumber;
+        private static EditText carwashPhone;
+        private static EditText carwashName;
 
         public static FirstStep newInstance() {
             return new FirstStep();
@@ -200,15 +251,19 @@ public class CarwashRegistration extends AppCompatActivity {
         int mAfter;
 
 
-        public static EditText getPhoneNumber() {
-            return phoneNumber;
+        public static EditText getCarwashPhone() {
+            return carwashPhone;
+        }
+        public static EditText getCarwashName() {
+            return carwashName;
         }
 
         @Override
         public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_carwash_registration_first, container, false);
-            phoneNumber = (EditText) rootView.findViewById(R.id.carwashPhone);
+            carwashName = (EditText) rootView.findViewById(R.id.carwashName);
+            carwashPhone = (EditText) rootView.findViewById(R.id.carwashPhone);
             textWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -224,15 +279,16 @@ public class CarwashRegistration extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    phoneNumber.removeTextChangedListener(textWatcher);
-                    phoneNumber.setText((String) PhoneFormatting.formatPhone(s, mStart, mCount, mAfter).get("phone"));
-                    phoneNumber.setSelection((int) PhoneFormatting.formatPhone(s, mStart, mCount, mAfter).get("selection"));
-                    phoneNumber.addTextChangedListener(textWatcher);
+                    carwashPhone.removeTextChangedListener(textWatcher);
+                    carwashPhone.setText((String) PhoneFormatting.formatPhone(s, mStart, mCount, mAfter).get("phone"));
+                    carwashPhone.setSelection((int) PhoneFormatting.formatPhone(s, mStart, mCount, mAfter).get("selection"));
+                    carwashPhone.addTextChangedListener(textWatcher);
                 }
             };
-            phoneNumber.addTextChangedListener(textWatcher);
+            carwashPhone.addTextChangedListener(textWatcher);
             return rootView;
         }
+
     }
     public static class SecondStep extends Fragment implements OnMapReadyCallback {
 

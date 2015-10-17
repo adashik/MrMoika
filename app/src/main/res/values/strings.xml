@@ -3,9 +3,9 @@
     <string name="car_registration">Я автовладелец</string>
     <string name="wash">Я хозяин мойки</string>
     <string name="title_activity_carwash_registration">CarwashRegistration</string>
-    <string name="phone">Введите номер мобильного:</string>
+    <string name="phone">Номер мобильного:</string>
     <string name="phone_hint">(777) 777-77-77</string>
-    <string name="carwash_name">Название:</string>
+    <string name="carwash_name">Название автомойки:</string>
     <string name="carwash_name_hint">Беспощадная мойка</string>
     <string name="step_one">Шаг 1. Основные данные</string>
     <string name="step_two">Шаг 2. Местоположение мойки</string>
@@ -15,5 +15,8 @@
     <string name="no">Нет</string>
     <string name="registration_button_confirm">Завершить регистрацию</string>
     <string name="registration_button_next">Далее</string>
+    <string name="error_empty_carwash_name">Это поле не может быть пустым</string>
+    <string name="error_wrong_phone_number">Номер должен содержать 10 цифр</string>
+    <string name="action_registration">Далее</string>
 
 </resources>
