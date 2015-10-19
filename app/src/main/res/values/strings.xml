@@ -9,7 +9,7 @@
     <string name="carwash_name_hint">Беспощадная мойка</string>
     <string name="step_one">Шаг 1. Основные данные</string>
     <string name="step_two">Шаг 2. Местоположение мойки</string>
-    <string name="step_three">Шаг 3. Подтверждение регистрации</string>
+    <string name="step_three">Шаг 3. Все верно?</string>
     <string name="registration_quit_dialog">Все введенные данные будут потеряны.\nВыйти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
@@ -18,5 +18,6 @@
     <string name="error_empty_carwash_name">Это поле не может быть пустым</string>
     <string name="error_wrong_phone_number">Номер должен содержать 10 цифр</string>
     <string name="action_registration">Далее</string>
+    <string name="carwash_address">Точный адрес:</string>
 
 </resources>
