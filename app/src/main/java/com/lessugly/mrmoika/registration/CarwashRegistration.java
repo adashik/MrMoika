@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,14 +32,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lessugly.mrmoika.R;
+import com.lessugly.mrmoika.util.NonSwipeableViewPager;
 import com.lessugly.mrmoika.util.PhoneFormatting;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import cz.msebera.android.httpclient.Header;
+
 public class CarwashRegistration extends AppCompatActivity {
 
-    private ViewPager viewPager;
+    private NonSwipeableViewPager viewPager;
+    private static Button buttonNext;
     private static Toolbar toolbar;
     private static String regPhone = "";
     private static String regName = "";
@@ -50,9 +59,12 @@ public class CarwashRegistration extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carwash_registration);
+        viewPager = (NonSwipeableViewPager) findViewById(R.id.container);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
         toolbar.setTitle(R.string.step_one);
-        final Button buttonNext = (Button) findViewById(R.id.buttonNext);
+        buttonNext = (Button) findViewById(R.id.buttonNext);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -68,7 +80,7 @@ public class CarwashRegistration extends AppCompatActivity {
                         break;
                     case 2:
                         if (!ThirdStep.carwashPhone.getText().toString().equals(regPhone)
-                                || !ThirdStep.carwashName.getText().toString().equals(regName)){
+                                || !ThirdStep.carwashName.getText().toString().equals(regName)) {
                             regPhone = ThirdStep.carwashPhone.getText().toString();
                             regName = ThirdStep.carwashName.getText().toString();
                             regAddress = ThirdStep.carwashAddress.getText().toString();
@@ -78,9 +90,7 @@ public class CarwashRegistration extends AppCompatActivity {
                 }
             }
         });
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.container);
-        viewPager.setAdapter(mSectionsPagerAdapter);
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -126,29 +136,25 @@ public class CarwashRegistration extends AppCompatActivity {
                 }
                 switch (viewPager.getCurrentItem()) {
                     case 0:
-                        attemptMoveToStepTwo();
+                        attemptMoveToNextStep(FirstStep.carwashName, FirstStep.carwashPhone, 0);
                         break;
                     case 1:
                         SecondStep.setRegAddress(getApplicationContext(), regLocation);
                         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
                         break;
                     case 2:
-                        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
+                        regPhone = ThirdStep.carwashPhone.getText().toString();
+                        regName = ThirdStep.carwashName.getText().toString();
+                        regAddress = ThirdStep.carwashAddress.getText().toString();
+                        attemptMoveToNextStep(ThirdStep.carwashName, ThirdStep.carwashPhone, 2);
                         break;
                 }
-                System.out.println("regAddress: "+regAddress);
-                System.out.println("regLocation: "+regLocation);
-                System.out.println("regName: "+regName);
-                System.out.println("regPhone: "+regPhone);
             }
         });
 
     }
 
-
-    private void attemptMoveToStepTwo() {
-        EditText carwashName = FirstStep.carwashName;
-        EditText carwashPhone = FirstStep.carwashPhone;
+    private void attemptMoveToNextStep(EditText carwashName, EditText carwashPhone, int pagerPosition) {
         carwashName.setError(null);
         carwashPhone.setError(null);
         String name = carwashName.getText().toString();
@@ -170,7 +176,8 @@ public class CarwashRegistration extends AppCompatActivity {
         }
 
         if (cancel) focusView.requestFocus();
-        else {
+        else
+        if (pagerPosition == 0){
             if (!FirstStep.carwashPhone.getText().toString().equals(regPhone)
                     || !FirstStep.carwashName.getText().toString().equals(regName)) {
                 regPhone = FirstStep.carwashPhone.getText().toString();
@@ -178,8 +185,29 @@ public class CarwashRegistration extends AppCompatActivity {
             }
             viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
         }
+        else if (pagerPosition == 2) carwashRegistration();
+    }
 
+    private void carwashRegistration() {
+        RequestParams params = new RequestParams();
+        params.put("phone",PhoneFormatting.phoneClear(regPhone));
+        params.put("name",regName);
+        params.put("address",regAddress);
+        params.put("latitude",String.valueOf(regLocation.latitude));
+        params.put("longitude",String.valueOf(regLocation.longitude));
 
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post("http://212.154.211.77:8080/backend/registration/carwash", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                Toast.makeText(getApplicationContext(),"Success! ResponseCode: "+new String(bytes),Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                Toast.makeText(getApplicationContext(),"Fail! "+i,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

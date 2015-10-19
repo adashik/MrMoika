@@ -10,7 +10,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent" android:id="@+id/map"
-        android:layout_marginBottom="@dimen/main_button_height"
         tools:context="com.lessugly.mrmoika.registration.CarwashRegistration.SecondStep"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 

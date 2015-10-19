@@ -17,7 +17,7 @@ public class PhoneFormatting {
     }
 
     public static HashMap<String, Object> formatPhone(CharSequence s,int start, int count, int after){
-        String changedNumber = String.valueOf(s).replace("(","").replace(")","").replace("-","").replace(" ","");
+        String changedNumber = phoneClear(String.valueOf(s));
         if (changedNumber.length() == 0) {
             setPhone("");
             setSelection(0);
@@ -144,6 +144,10 @@ public class PhoneFormatting {
         result.put("selection",selection);
         
         return result;
+    }
+
+    public static String phoneClear(String phone){
+        return phone.replace("(","").replace(")","").replace("-","").replace(" ","");
     }
 
 }
