@@ -34,16 +34,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lessugly.mrmoika.R;
+import com.lessugly.mrmoika.util.CheckInternet;
 import com.lessugly.mrmoika.util.NonSwipeableViewPager;
 import com.lessugly.mrmoika.util.PhoneFormatting;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
 import cz.msebera.android.httpclient.Header;
 
 public class CarwashRegistration extends AppCompatActivity {
@@ -116,6 +115,7 @@ public class CarwashRegistration extends AppCompatActivity {
                     case 2:
                         ThirdStep.carwashName.setText(regName);
                         ThirdStep.carwashPhone.setText(regPhone);
+                        if (ThirdStep.carwashAddress.getText().toString().equals(""))
                         ThirdStep.carwashAddress.setText(regAddress);
                         toolbar.setTitle(R.string.step_three);
                         buttonNext.setText(R.string.registration_button_confirm);
@@ -142,6 +142,7 @@ public class CarwashRegistration extends AppCompatActivity {
                         attemptMoveToNextStep(FirstStep.carwashName, FirstStep.carwashPhone, 0);
                         break;
                     case 1:
+                        if (CheckInternet.getInstance(getApplicationContext()).isOnline())
                         SecondStep.setRegAddress(getApplicationContext(), regLocation);
                         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
                         break;
@@ -223,7 +224,6 @@ public class CarwashRegistration extends AppCompatActivity {
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            //ThirdStep.regFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             ThirdStep.regFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -231,13 +231,12 @@ public class CarwashRegistration extends AppCompatActivity {
                     ThirdStep.regFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
-
-            //ThirdStep.progressView.setVisibility(show ? View.VISIBLE : View.GONE);
             ThirdStep.progressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     ThirdStep.progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+
                 }
             });
         } else {
@@ -448,6 +447,7 @@ public class CarwashRegistration extends AppCompatActivity {
         public static GoogleMap getMap() {
             return map;
         }
+
     }
 
 
