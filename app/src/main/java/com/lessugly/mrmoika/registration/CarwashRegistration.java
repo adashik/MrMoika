@@ -1,6 +1,8 @@
 package com.lessugly.mrmoika.registration;
 
-
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -54,13 +56,14 @@ public class CarwashRegistration extends AppCompatActivity {
     private static LatLng regLocation;
     private static String regAddress = "";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_carwash_registration);
         viewPager = (NonSwipeableViewPager) findViewById(R.id.container);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         toolbar.setTitle(R.string.step_one);
@@ -189,10 +192,11 @@ public class CarwashRegistration extends AppCompatActivity {
     }
 
     private void carwashRegistration() {
+        showProgress(true);
         RequestParams params = new RequestParams();
         params.put("phone",PhoneFormatting.phoneClear(regPhone));
         params.put("name",regName);
-        params.put("address",regAddress);
+        params.put("address", regAddress);
         params.put("latitude",String.valueOf(regLocation.latitude));
         params.put("longitude",String.valueOf(regLocation.longitude));
 
@@ -200,14 +204,48 @@ public class CarwashRegistration extends AppCompatActivity {
         client.post("http://212.154.211.77:8080/backend/registration/carwash", params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                showProgress(false);
                 Toast.makeText(getApplicationContext(),"Success! ResponseCode: "+new String(bytes),Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                showProgress(false);
                 Toast.makeText(getApplicationContext(),"Fail! "+i,Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+            //ThirdStep.regFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            ThirdStep.regFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    ThirdStep.regFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            //ThirdStep.progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            ThirdStep.progressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    ThirdStep.progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            ThirdStep.progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            ThirdStep.regFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
@@ -426,6 +464,9 @@ public class CarwashRegistration extends AppCompatActivity {
         private static EditText carwashPhone;
         private static EditText carwashName;
         private static EditText carwashAddress;
+        private static View progressView;
+        private static View regFormView;
+
         TextWatcher textWatcher = null;
         int mStart;
         int mCount;
@@ -439,6 +480,8 @@ public class CarwashRegistration extends AppCompatActivity {
             carwashName = (EditText) rootView.findViewById(R.id.carwashName);
             carwashPhone = (EditText) rootView.findViewById(R.id.carwashPhone);
             carwashAddress = (EditText) rootView.findViewById(R.id.carwashAddress);
+            progressView = rootView.findViewById(R.id.login_progress);
+            regFormView = rootView.findViewById(R.id.registration_form);
             textWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
