@@ -199,7 +199,7 @@ public class CarwashRegistration extends AppCompatActivity {
         params.put("name",regName);
         params.put("address", regAddress);
         params.put("latitude",String.valueOf(regLocation.latitude));
-        //params.put("longitude",String.valueOf(regLocation.longitude));
+        params.put("longitude",String.valueOf(regLocation.longitude));
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post("http://212.154.211.77:8080/backend/registration/carwash", params, new AsyncHttpResponseHandler() {
