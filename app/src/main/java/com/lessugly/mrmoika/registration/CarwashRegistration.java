@@ -6,10 +6,14 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
+import android.os.ResultReceiver;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.app.Fragment;
@@ -33,7 +37,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.lessugly.mrmoika.MainActivity;
 import com.lessugly.mrmoika.R;
+import com.lessugly.mrmoika.carwash.CarwashMain;
 import com.lessugly.mrmoika.util.CheckInternet;
 import com.lessugly.mrmoika.util.NonSwipeableViewPager;
 import com.lessugly.mrmoika.util.PhoneFormatting;
@@ -43,6 +49,8 @@ import com.loopj.android.http.RequestParams;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.prefs.Preferences;
+
 import cz.msebera.android.httpclient.Header;
 
 public class CarwashRegistration extends AppCompatActivity {
@@ -203,10 +211,20 @@ public class CarwashRegistration extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.post("http://212.154.211.77:8080/backend/registration/carwash", params, new AsyncHttpResponseHandler() {
+
             @Override
             public void onSuccess(int i, Header[] headers, byte[] bytes) {
+
                 showProgress(false);
                 Toast.makeText(getApplicationContext(),"Success! ResponseCode: "+new String(bytes),Toast.LENGTH_SHORT).show();
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("registration", true).putBoolean("carwash",true).commit();
+                startActivity(new Intent(CarwashRegistration.this, CarwashMain.class));
+                ((ResultReceiver)getIntent().getParcelableExtra("finisher")).send(2, new Bundle());
+                CarwashRegistration.this.finish();
+
             }
 
             @Override
