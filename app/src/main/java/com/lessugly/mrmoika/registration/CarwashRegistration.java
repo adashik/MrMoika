@@ -31,25 +31,30 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.lessugly.mrmoika.MainActivity;
 import com.lessugly.mrmoika.R;
 import com.lessugly.mrmoika.carwash.CarwashMain;
+import com.lessugly.mrmoika.model.Carwash;
 import com.lessugly.mrmoika.util.CheckInternet;
 import com.lessugly.mrmoika.util.NonSwipeableViewPager;
 import com.lessugly.mrmoika.util.PhoneFormatting;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.prefs.Preferences;
+
 
 import cz.msebera.android.httpclient.Header;
 
@@ -62,6 +67,7 @@ public class CarwashRegistration extends AppCompatActivity {
     private static String regName = "";
     private static LatLng regLocation;
     private static String regAddress = "";
+   // private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,12 +209,10 @@ public class CarwashRegistration extends AppCompatActivity {
     private void carwashRegistration() {
         showProgress(true);
         RequestParams params = new RequestParams();
-        params.put("phone",PhoneFormatting.phoneClear(regPhone));
-        params.put("name",regName);
-        params.put("address", regAddress);
-        params.put("latitude",String.valueOf(regLocation.latitude));
-        params.put("longitude",String.valueOf(regLocation.longitude));
-
+        params.put("carwash", new Carwash(PhoneFormatting.phoneClear(regPhone),
+                    regName, regLocation.latitude, regLocation.longitude, regAddress).getCarwashAsJSON().toString());
+        System.out.println(new Carwash(PhoneFormatting.phoneClear(regPhone),
+                regName, regLocation.latitude, regLocation.longitude, regAddress).getCarwashAsJSON().toString());
         AsyncHttpClient client = new AsyncHttpClient();
         client.post("http://212.154.211.77:8080/backend/registration/carwash", params, new AsyncHttpResponseHandler() {
 
