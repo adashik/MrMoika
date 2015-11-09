@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_carwash_registration"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.lessugly.mrmoika.registration.CarwashRegistration"
+    >
+
+    <android.support.design.widget.AppBarLayout android:id="@+id/appbar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:layout_scrollFlags="scroll|enterAlways">
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <Button
+        android:id="@+id/buttonNextUser"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/main_button_height"
+        android:text="@string/registration_button_confirm"
+        android:textAllCaps="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/button_next"
+        />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="235dp"
+        android:layout_below="@+id/appbar"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/buttonNextUser">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phone"
+            android:id="@+id/phoneHint"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/text_secondary" />
+        <EditText
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/carownerPhoneCode"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:textAlignment="center"
+            android:inputType="none"
+            android:editable="false"
+            android:maxLength="2"
+            android:text="+7"
+            android:paddingTop="24dp" />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/carownerPhone"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:inputType="number"
+            android:textColorHint="@color/text_hint"
+            android:maxLength="15"
+            android:hint="@string/phone_hint"
+            android:paddingTop="24dp"
+            android:layout_marginLeft="48dp"
+            android:text=""
+            ><requestFocus/></EditText>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_type_hint"
+            android:id="@+id/car_type_view"
+            android:layout_below="@+id/carownerPhone"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/text_secondary" />
+
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/car_type"
+            android:layout_below="@+id/carownerPhone"
+            android:layout_alignParentStart="true"
+            android:paddingTop="24dp"
+            android:inputType="text"
+            android:text=""
+            android:hint="@string/car_type_hint"
+            android:textColorHint="@color/text_hint"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_brand_hint"
+            android:id="@+id/car_brand_view"
+            android:layout_below="@+id/car_type"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/text_secondary" />
+
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/car_brand"
+            android:layout_below="@+id/car_type"
+            android:layout_alignParentStart="true"
+            android:paddingTop="24dp"
+            android:inputType="text"
+            android:text=""
+            android:hint="@string/car_brand_hint"
+            android:textColorHint="@color/text_hint"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/car_model_hint"
+            android:id="@+id/car_model_view"
+            android:layout_below="@+id/car_brand"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/text_secondary" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/car_model"
+            android:layout_below="@+id/car_brand"
+            android:layout_alignParentStart="true"
+            android:paddingTop="24dp"
+            android:inputType="text"
+            android:text=""
+            android:hint="@string/car_model_hint"
+            android:textColorHint="@color/text_hint"/>
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

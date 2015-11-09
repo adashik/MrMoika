@@ -30,8 +30,15 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity android:name=".carwash.CarwashMain" >
-
         </activity>
+        <activity
+            android:name=".registration.CarownerRegistration"
+            android:label="@string/title_activity_carowner_registration"
+            android:theme="@style/AppTheme" >
+        </activity>
+
+
+
     </application>
 
 </manifest>

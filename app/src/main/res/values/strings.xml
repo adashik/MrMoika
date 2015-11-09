@@ -19,5 +19,9 @@
     <string name="error_wrong_phone_number">Номер должен содержать 10 цифр</string>
     <string name="action_registration">Далее</string>
     <string name="carwash_address">Точный адрес:</string>
+    <string name="title_activity_carowner_registration">CarownerRegistration</string>
+    <string name="car_type_hint">Тип кузова</string>
+    <string name="car_brand_hint">Марка</string>
+    <string name="car_model_hint">Модель</string>
 
 </resources>

@@ -17,7 +17,8 @@
         android:layout_marginBottom="120dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/button_next"/>
+        android:background="@drawable/button_next"
+        android:onClick="carownerRegistration" />
 
     <Button
         android:layout_width="@dimen/main_button_width"

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.lessugly.mrmoika.carwash.CarwashMain;
+import com.lessugly.mrmoika.registration.CarownerRegistration;
 import com.lessugly.mrmoika.registration.CarwashRegistration;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,5 +38,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         startActivityForResult(goToCarwashRegistration, 1);
+    }
+
+    public void carownerRegistration(View view) {
+        Intent intent = new Intent(MainActivity.this, CarownerRegistration.class);
+        startActivity(intent);
     }
 }
