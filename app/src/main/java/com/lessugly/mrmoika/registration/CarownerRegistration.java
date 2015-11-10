@@ -31,7 +31,7 @@ public class CarownerRegistration extends AppCompatActivity {
 
 
         EditText cartype = (EditText) findViewById(R.id.car_type);
-       // cartype.setOnClickListener(viewClickListener);
+       /// cartype.setOnClickListener(viewClickListener);
         cartype.setInputType(InputType.TYPE_NULL); // отключаем клавиатуру при клике на тип кузова
 
         cartype.setOnFocusChangeListener(viewFocusListener);
