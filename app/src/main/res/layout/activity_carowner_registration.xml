@@ -102,6 +102,7 @@
             android:inputType="text"
             android:text=""
             android:hint="@string/car_type_hint"
+
             android:textColorHint="@color/text_hint"/>
 
         <TextView

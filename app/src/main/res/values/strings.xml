@@ -23,5 +23,8 @@
     <string name="car_type_hint">Тип кузова</string>
     <string name="car_brand_hint">Марка</string>
     <string name="car_model_hint">Модель</string>
-
+    <string name="popup_menu1">легковая</string>
+    <string name="popup_menu2">паркетник</string>
+    <string name="popup_menu3">джип</string>
+    <string name="popup_menu4">микроавтобус</string>
 </resources>
